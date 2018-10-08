@@ -1,0 +1,19 @@
+﻿@using GridMvc.Html
+@model IEnumerable<MVCBlog.Models.Makale>
+
+@{
+    ViewBag.Title = "KategoriMakale";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Seçtiğiniz kategoriye ait makaleler</h2>
+
+@Html.Grid(Model).SetLanguage("tr").Columns(columns =>
+{
+    columns.Add(m => m.Kategori.Isim).Titled("Kategori Adı").SetWidth(5).Sortable(true);
+    columns.Add(m => m.Baslik).Titled("Makale Başlığı").SetWidth(5).Sortable(true).Filterable(true);
+    columns.Add(m => m.Uye.AdSoyad).Titled("Yazar").SetWidth(5).Sortable(true).Filterable(true);
+    columns.Add(m => m.Icerik).Titled("Makale İçeriği").SetWidth(5).Filterable(true);
+
+
+}).WithPaging(4)

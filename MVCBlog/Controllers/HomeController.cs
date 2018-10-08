@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVCBlog.Models;
@@ -17,6 +18,17 @@ namespace MVCBlog.Controllers
         public ActionResult Index(int Page=1)
         {
             var makaleler = db.Makale.OrderByDescending(m => m.Id).ToPagedList(Page, 4);
+
+            return View(makaleler);
+        }
+
+        public ActionResult KategoriMakale(int id)
+        {
+            var makaleler = db.Makale.Where(m => m.KategoriId == id).ToList();
+
+            if (makaleler == null)
+                return HttpNotFound();
+
 
             return View(makaleler);
         }

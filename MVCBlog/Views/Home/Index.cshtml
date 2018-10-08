@@ -1,5 +1,6 @@
 ﻿@using PagedList
 @using PagedList.Mvc
+
 @model IPagedList<MVCBlog.Models.Makale>
 @{
     ViewBag.Title = "Index";
@@ -46,7 +47,7 @@
     <!-- Pagination -->
     <div class="pagination justify-content-center mb-4">
       
-          @Html.PagedListPager(Model, page => Url.Action("Index", new { Page }), PagedListRenderOptions.Classic)
+          @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page }), PagedListRenderOptions.Classic)
       
     </div>
 
