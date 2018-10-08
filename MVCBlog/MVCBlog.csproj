@@ -1640,6 +1640,9 @@
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Home\KategoriMakale.cshtml" />
+    <Content Include="Views\Home\BlogAramaPartial.cshtml" />
+    <Content Include="Views\Home\BlogArama.cshtml" />
+    <Content Include="Views\Home\Son5Yorum.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

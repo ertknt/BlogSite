@@ -15,7 +15,7 @@ namespace MVCBlog.Controllers
         MVCBlogDb db = new MVCBlogDb();
 
         // GET: Home
-        public ActionResult Index(int Page=1)
+        public ActionResult Index(int Page = 1)
         {
             var makaleler = db.Makale.OrderByDescending(m => m.Id).ToPagedList(Page, 4);
 
@@ -50,6 +50,20 @@ namespace MVCBlog.Controllers
             var kategori = db.Kategori.ToList();
 
             return View(kategori);
+        }
+
+        public ActionResult BlogArama(string aranan = null)
+        {
+            var arananMakale = db.Makale.Where(m => m.Baslik.Contains(aranan)).OrderByDescending(m =>m.Id).ToList();
+
+            return View(arananMakale);
+        }
+
+        public ActionResult Son5Yorum()
+        {
+            var yorumlar = db.Yorum.OrderByDescending(y => y.Id).Take(5);
+
+            return View(yorumlar);
         }
 
         public JsonResult YorumYap(string yorum, int makaleId)

@@ -1,0 +1,15 @@
+﻿
+
+
+<h5 class="card-header">Arama</h5>
+@using (Html.BeginForm("BlogArama", "Home", FormMethod.Post))
+{
+    <div class="card-body">
+        <div class="input-group">
+            <input id="aranan" name="aranan" type="text" class="form-control" placeholder="Ara...">
+            <span class="input-group-btn">
+                <button class="btn btn-secondary"value="aranan" type="submit">Ara!</button>
+            </span>
+        </div>
+    </div>
+}
