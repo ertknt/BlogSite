@@ -66,6 +66,13 @@ namespace MVCBlog.Controllers
             return View(yorumlar);
         }
 
+        public ActionResult PopulerMakaleler()
+        {
+            var makaleler = db.Makale.OrderByDescending(m => m.Okunma).ToList();
+
+            return View(makaleler);
+        }
+
         public JsonResult YorumYap(string yorum, int makaleId)
         {
             var UyeId = Session["Id"];

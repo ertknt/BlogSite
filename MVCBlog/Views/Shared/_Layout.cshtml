@@ -82,7 +82,7 @@
             <div class="col-md-4">
                 <!-- Search Widget -->
                 <div class="card my-4">
-                  @Html.Partial("BlogAramaPartial")
+                    @Html.Partial("BlogAramaPartial")
                 </div>
                 <!-- Categories Widget -->
                 <div class="card my-4">
@@ -92,8 +92,14 @@
                 </div>
                 <!-- Comments Widget -->
                 <div class="card my-4">
-                    @{ 
+                    @{
                         Html.RenderAction("Son5Yorum", "Home");
+                    }
+                </div>
+                <!-- Populer Makaleler Widget -->
+                <div class="card my-4">
+                    @{
+                        Html.RenderAction("PopulerMakaleler", "Home");
                     }
                 </div>
             </div>
