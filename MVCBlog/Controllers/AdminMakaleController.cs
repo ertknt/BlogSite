@@ -12,7 +12,6 @@ namespace MVCBlog.Controllers
     {
         MVCBlogDb db = new MVCBlogDb();
 
-        // GET: AdminMakale
         public ActionResult Index()
         {
             var makale = db.Makale.ToList();
@@ -20,14 +19,12 @@ namespace MVCBlog.Controllers
             return View(makale);
         }
 
-        // GET: AdminMakale/Details/5
         public ActionResult Details(int id)
         {
 
             return View();
         }
 
-        // GET: AdminMakale/Create
         public ActionResult Create()
         {
             ViewBag.KategoriId = new SelectList(db.Kategori, "Id", "Isim");
@@ -35,8 +32,8 @@ namespace MVCBlog.Controllers
             return View();
         }
 
-        // POST: AdminMakale/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Makale makale, string etiketler, HttpPostedFileBase Foto)
         {
             try
@@ -76,7 +73,6 @@ namespace MVCBlog.Controllers
             }
         }
 
-        // GET: AdminMakale/Edit/5
         public ActionResult Edit(int id)
         {
             var makale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
@@ -89,8 +85,8 @@ namespace MVCBlog.Controllers
             return View(makale);
         }
 
-        // POST: AdminMakale/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, HttpPostedFileBase Foto, Makale makale)
         {
             try
@@ -128,7 +124,6 @@ namespace MVCBlog.Controllers
             }
         }
 
-        // GET: AdminMakale/Delete/5
         public ActionResult Delete(int id)
         {
             var makale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
@@ -139,7 +134,6 @@ namespace MVCBlog.Controllers
             return View(makale);
         }
 
-        // POST: AdminMakale/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
