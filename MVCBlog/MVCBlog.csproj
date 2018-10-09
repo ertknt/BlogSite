@@ -1644,6 +1644,7 @@
     <Content Include="Views\Home\BlogArama.cshtml" />
     <Content Include="Views\Home\Son5Yorum.cshtml" />
     <Content Include="Views\Home\PopulerMakaleler.cshtml" />
+    <Content Include="Views\Uye\UyeProfil.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

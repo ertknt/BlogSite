@@ -17,6 +17,7 @@ namespace MVCBlog.Models
 
         public int Id { get; set; }
 
+        [Display(Name = "Yetki")]
         [Column("Yetki")]
         [StringLength(50)]
         public string Yetki1 { get; set; }

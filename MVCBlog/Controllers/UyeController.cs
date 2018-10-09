@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -13,7 +14,6 @@ namespace MVCBlog.Controllers
     {
         MVCBlogDb db = new MVCBlogDb();
 
-        // GET: Uye
         public ActionResult Index(int id)
         {
             var uye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
@@ -25,6 +25,14 @@ namespace MVCBlog.Controllers
 
             return View(uye);
 
+        }
+
+        public ActionResult UyeProfil(int id)
+        {
+            var uye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
+
+
+            return View(uye);
         }
 
         public ActionResult Create()
@@ -77,7 +85,7 @@ namespace MVCBlog.Controllers
             {
                 var guncellenecekUye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
 
-                if(Foto != null)
+                if (Foto != null)
                 {
                     if (System.IO.File.Exists(Server.MapPath(guncellenecekUye.Foto)))
                     {
@@ -124,6 +132,7 @@ namespace MVCBlog.Controllers
                 Session["Id"] = login.Id;
                 Session["KullaniciAdi"] = login.KullaniciAdi;
                 Session["YetkiId"] = login.YetkiId;
+                ViewBag.Kullanici = login.AdSoyad;
 
                 return RedirectToAction("Index", "Home");
             }
