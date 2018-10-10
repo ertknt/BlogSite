@@ -11,6 +11,7 @@ namespace MVCBlog.Models
     {
         public int Id { get; set; }
 
+        [Display(Name ="Yorum")]
         [StringLength(500)]
         public string Icerik { get; set; }
 

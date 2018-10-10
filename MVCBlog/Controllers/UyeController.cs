@@ -87,10 +87,7 @@ namespace MVCBlog.Controllers
 
                 if (Foto != null)
                 {
-                    if (System.IO.File.Exists(Server.MapPath(guncellenecekUye.Foto)))
-                    {
-                        System.IO.File.Delete(Server.MapPath(guncellenecekUye.Foto));
-                    }
+                   
 
                     WebImage img = new WebImage(Foto.InputStream);
                     FileInfo fotoInfo = new FileInfo(Foto.FileName);
