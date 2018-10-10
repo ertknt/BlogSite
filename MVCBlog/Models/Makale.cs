@@ -5,6 +5,7 @@ namespace MVCBlog.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web.Mvc;
 
     [Table("Makale")]
     public partial class Makale
@@ -18,10 +19,13 @@ namespace MVCBlog.Models
 
         public int Id { get; set; }
 
+        
         [Display(Name ="Makale Baþlýðý")]
         [StringLength(150)]
         public string Baslik { get; set; }
 
+        [AllowHtml]
+        [UIHint("tinymce_full_compressed")]
         [Display(Name = "Makale Ýçeriði")]
         public string Icerik { get; set; }
 

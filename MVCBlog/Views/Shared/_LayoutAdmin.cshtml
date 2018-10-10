@@ -23,6 +23,10 @@
     <link href="@Url.Content("~/Content/vendor/datatables/dataTables.bootstrap4.css")" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="@Url.Content("~/Content/css/sb-admin.css")" rel="stylesheet">
+    <!-- include summernote css/js -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+
+
 </head>
 <body id="page-top">
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
@@ -124,7 +128,6 @@
             <!-- container-fluid -->
             @RenderBody()
             <!-- /.container-fluid -->
-
             <!-- Sticky Footer -->
             <footer class="sticky-footer">
                 <div class="container my-auto">
@@ -173,5 +176,6 @@
     <!-- Demo scripts for this page-->
     <script src="@Url.Content("~/Content/js/demo/datatables-demo.js")"></script>
     <script src="@Url.Content("~/Content/js/demo/chart-area-demo.js")"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
 </body>
 </html>
