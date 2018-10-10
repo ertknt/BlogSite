@@ -6,15 +6,18 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using MVCBlog.Models;
+using PagedList;
+using PagedList.Mvc;
+
 namespace MVCBlog.Controllers
 {
     public class AdminMakaleController : Controller
     {
         MVCBlogDb db = new MVCBlogDb();
 
-        public ActionResult Index()
+        public ActionResult Index(int Page=1)
         {
-            var makale = db.Makale.ToList();
+            var makale = db.Makale.OrderBy(m =>m.Id).ToPagedList(Page, 4);
 
             return View(makale);
         }
