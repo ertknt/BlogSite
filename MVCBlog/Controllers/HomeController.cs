@@ -12,19 +12,29 @@ namespace MVCBlog.Controllers
 {
     public class HomeController : Controller
     {
-        MVCBlogDb db = new MVCBlogDb();
+        private MVCBlogDb _context;
+
+        public HomeController()
+        {
+            _context = new MVCBlogDb();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         // GET: Home
         public ActionResult Index(int Page = 1)
         {
-            var makaleler = db.Makale.OrderByDescending(m => m.Id).ToPagedList(Page, 4);
+            var makaleler = _context.Makale.OrderByDescending(m => m.Id).ToPagedList(Page, 4);
 
             return View(makaleler);
         }
 
         public ActionResult KategoriMakale(int id)
         {
-            var makaleler = db.Makale.Where(m => m.KategoriId == id).ToList();
+            var makaleler = _context.Makale.Where(m => m.KategoriId == id).ToList();
 
             if (makaleler == null)
                 return HttpNotFound();
@@ -35,7 +45,7 @@ namespace MVCBlog.Controllers
 
         public ActionResult MakaleDetay(int id)
         {
-            var makale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
+            var makale = _context.Makale.Where(m => m.Id == id).SingleOrDefault();
 
             if (makale == null)
                 return HttpNotFound();
@@ -47,28 +57,28 @@ namespace MVCBlog.Controllers
 
         public ActionResult KategoriPartial()
         {
-            var kategori = db.Kategori.ToList();
+            var kategori = _context.Kategori.ToList();
 
             return View(kategori);
         }
 
         public ActionResult BlogArama(string aranan = null)
         {
-            var arananMakale = db.Makale.Where(m => m.Baslik.Contains(aranan)).OrderByDescending(m =>m.Id).ToList();
+            var arananMakale = _context.Makale.Where(m => m.Baslik.Contains(aranan)).OrderByDescending(m =>m.Id).ToList();
 
             return View(arananMakale);
         }
 
         public ActionResult Son5Yorum()
         {
-            var yorumlar = db.Yorum.OrderByDescending(y => y.Id).Take(5);
+            var yorumlar = _context.Yorum.OrderByDescending(y => y.Id).Take(5);
 
             return View(yorumlar);
         }
 
         public ActionResult PopulerMakaleler()
         {
-            var makaleler = db.Makale.OrderByDescending(m => m.Okunma).ToList();
+            var makaleler = _context.Makale.OrderByDescending(m => m.Okunma).ToList();
 
             return View(makaleler);
         }
@@ -79,7 +89,7 @@ namespace MVCBlog.Controllers
 
             if (yorum != null)
             {
-                db.Yorum.Add(new Yorum
+                _context.Yorum.Add(new Yorum
                 {
                     UyeId = Convert.ToInt32(UyeId),
                     MakaleId = makaleId,
@@ -87,7 +97,7 @@ namespace MVCBlog.Controllers
                     Tarih = DateTime.Now
                 });
 
-                db.SaveChanges();
+                _context.SaveChanges();
             }
 
             return Json(false, JsonRequestBehavior.AllowGet);
@@ -97,13 +107,13 @@ namespace MVCBlog.Controllers
         {
             var UyeId = Session["Id"];
 
-            var yorum = db.Yorum.Where(y => y.Id == id).SingleOrDefault();
-            var makale = db.Makale.Where(m => m.Id == yorum.MakaleId).SingleOrDefault();
+            var yorum = _context.Yorum.Where(y => y.Id == id).SingleOrDefault();
+            var makale = _context.Makale.Where(m => m.Id == yorum.MakaleId).SingleOrDefault();
 
             if (yorum.UyeId == Convert.ToInt32(UyeId))
             {
-                db.Yorum.Remove(yorum);
-                db.SaveChanges();
+                _context.Yorum.Remove(yorum);
+                _context.SaveChanges();
                 return RedirectToAction("MakaleDetay", "Home", new { id = makale.Id });
 
             }
@@ -116,10 +126,10 @@ namespace MVCBlog.Controllers
 
         public ActionResult OkunmaArtir(int MakaleId)
         {
-            var makale = db.Makale.Where(m => m.Id == MakaleId).SingleOrDefault();
+            var makale = _context.Makale.Where(m => m.Id == MakaleId).SingleOrDefault();
 
             makale.Okunma += 1;
-            db.SaveChanges();
+            _context.SaveChanges();
 
             return View();
         }

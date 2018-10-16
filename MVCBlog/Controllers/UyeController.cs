@@ -12,11 +12,21 @@ namespace MVCBlog.Controllers
 {
     public class UyeController : Controller
     {
-        MVCBlogDb db = new MVCBlogDb();
+        private MVCBlogDb _context;
+
+        public UyeController()
+        {
+            _context = new MVCBlogDb();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         public ActionResult Index(int id)
         {
-            var uye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
+            var uye = _context.Uye.Where(u => u.Id == id).SingleOrDefault();
 
             if (Convert.ToInt32(Session["Id"]) != uye.Id)
             {
@@ -29,7 +39,7 @@ namespace MVCBlog.Controllers
 
         public ActionResult UyeProfil(int id)
         {
-            var uye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
+            var uye = _context.Uye.Where(u => u.Id == id).SingleOrDefault();
 
 
             return View(uye);
@@ -57,8 +67,8 @@ namespace MVCBlog.Controllers
                 }
 
                 uye.YetkiId = 2;
-                db.Uye.Add(uye);
-                db.SaveChanges();
+                _context.Uye.Add(uye);
+                _context.SaveChanges();
 
                 Session["Id"] = uye.Id;
                 Session["KullaniciAdi"] = uye.KullaniciAdi;
@@ -70,7 +80,7 @@ namespace MVCBlog.Controllers
 
         public ActionResult Edit(int id)
         {
-            var uye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
+            var uye = _context.Uye.Where(u => u.Id == id).SingleOrDefault();
 
             if (Convert.ToInt32(Session["Id"]) != uye.Id)
                 return HttpNotFound();
@@ -83,7 +93,7 @@ namespace MVCBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                var guncellenecekUye = db.Uye.Where(u => u.Id == id).SingleOrDefault();
+                var guncellenecekUye = _context.Uye.Where(u => u.Id == id).SingleOrDefault();
 
                 if (Foto != null)
                 {
@@ -103,7 +113,7 @@ namespace MVCBlog.Controllers
                 guncellenecekUye.Sifre = uye.Sifre;
                 guncellenecekUye.KullaniciAdi = uye.KullaniciAdi;
 
-                db.SaveChanges();
+                _context.SaveChanges();
 
                 Session["KullaniciAdi"] = uye.KullaniciAdi;
 
@@ -122,7 +132,7 @@ namespace MVCBlog.Controllers
         [HttpPost]
         public ActionResult Login(Uye uye)
         {
-            var login = db.Uye.Where(u => u.KullaniciAdi == uye.KullaniciAdi).SingleOrDefault();
+            var login = _context.Uye.Where(u => u.KullaniciAdi == uye.KullaniciAdi).SingleOrDefault();
 
             if (login.KullaniciAdi == uye.KullaniciAdi && login.Email == uye.Email && login.Sifre == uye.Sifre)
             {

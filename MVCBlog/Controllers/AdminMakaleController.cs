@@ -13,11 +13,21 @@ namespace MVCBlog.Controllers
 {
     public class AdminMakaleController : Controller
     {
-        MVCBlogDb db = new MVCBlogDb();
+        private MVCBlogDb _context;
+
+        public AdminMakaleController()
+        {
+            _context = new MVCBlogDb();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         public ActionResult Index(int Page=1)
         {
-            var makale = db.Makale.OrderBy(m =>m.Id).ToPagedList(Page, 4);
+            var makale = _context.Makale.OrderBy(m =>m.Id).ToPagedList(Page, 4);
 
             return View(makale);
         }
@@ -30,7 +40,7 @@ namespace MVCBlog.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.KategoriId = new SelectList(db.Kategori, "Id", "Isim");
+            ViewBag.KategoriId = new SelectList(_context.Kategori, "Id", "Isim");
 
             return View();
         }
@@ -58,15 +68,15 @@ namespace MVCBlog.Controllers
                     foreach (var item in etiketDizisi)
                     {
                         var yeniEtiket = new Etiket { İsim = item };
-                        db.Etiket.Add(yeniEtiket);
+                        _context.Etiket.Add(yeniEtiket);
                         makale.Etiket.Add(yeniEtiket);
                     }
                 }
 
                 makale.Okunma = 0;
                 makale.UyeId = Convert.ToInt32(Session["Id"]);
-                db.Makale.Add(makale);
-                db.SaveChanges();
+                _context.Makale.Add(makale);
+                _context.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -78,12 +88,12 @@ namespace MVCBlog.Controllers
 
         public ActionResult Edit(int id)
         {
-            var makale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
+            var makale = _context.Makale.Where(m => m.Id == id).SingleOrDefault();
 
             if (makale == null)
                 return HttpNotFound();
 
-            ViewBag.KategoriId = new SelectList(db.Kategori, "Id", "Isim", makale.KategoriId);
+            ViewBag.KategoriId = new SelectList(_context.Kategori, "Id", "Isim", makale.KategoriId);
 
             return View(makale);
         }
@@ -94,7 +104,7 @@ namespace MVCBlog.Controllers
         {
             try
             {
-                var guncellenecekMakale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
+                var guncellenecekMakale = _context.Makale.Where(m => m.Id == id).SingleOrDefault();
 
                 if (Foto != null)
                 {
@@ -116,7 +126,7 @@ namespace MVCBlog.Controllers
                 guncellenecekMakale.Icerik = makale.Icerik;
                 guncellenecekMakale.KategoriId = makale.KategoriId;
 
-                db.SaveChanges();
+                _context.SaveChanges();
 
 
                 return RedirectToAction("Index");
@@ -129,7 +139,7 @@ namespace MVCBlog.Controllers
 
         public ActionResult Delete(int id)
         {
-            var makale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
+            var makale = _context.Makale.Where(m => m.Id == id).SingleOrDefault();
 
             if (makale == null)
                 return HttpNotFound();
@@ -140,7 +150,7 @@ namespace MVCBlog.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            var makale = db.Makale.Where(m => m.Id == id).SingleOrDefault();
+            var makale = _context.Makale.Where(m => m.Id == id).SingleOrDefault();
 
             try
             {
@@ -155,16 +165,16 @@ namespace MVCBlog.Controllers
 
                 foreach (var item in makale.Yorum.ToList())
                 {
-                    db.Yorum.Remove(item);
+                    _context.Yorum.Remove(item);
                 }
 
                 foreach (var item in makale.Etiket.ToList())
                 {
-                    db.Etiket.Remove(item);
+                    _context.Etiket.Remove(item);
                 }
 
-                db.Makale.Remove(makale);
-                db.SaveChanges();
+                _context.Makale.Remove(makale);
+                _context.SaveChanges();
 
                 return RedirectToAction("Index");
             }

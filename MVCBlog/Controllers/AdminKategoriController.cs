@@ -12,12 +12,22 @@ namespace MVCBlog.Controllers
 {
     public class AdminKategoriController : Controller
     {
-        private MVCBlogDb db = new MVCBlogDb();
+        private MVCBlogDb _context;
+
+        public AdminKategoriController()
+        {
+            _context = new MVCBlogDb();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         // GET: AdminKategori
         public ActionResult Index()
         {
-            return View(db.Kategori.ToList());
+            return View(_context.Kategori.ToList());
         }
 
         public ActionResult Details(int? id)
@@ -26,7 +36,7 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Kategori kategori = db.Kategori.Find(id);
+            Kategori kategori = _context.Kategori.Find(id);
             if (kategori == null)
             {
                 return HttpNotFound();
@@ -45,8 +55,8 @@ namespace MVCBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Kategori.Add(kategori);
-                db.SaveChanges();
+                _context.Kategori.Add(kategori);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -60,7 +70,7 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Kategori kategori = db.Kategori.Find(id);
+            Kategori kategori = _context.Kategori.Find(id);
             if (kategori == null)
             {
                 return HttpNotFound();
@@ -74,8 +84,8 @@ namespace MVCBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(kategori).State = EntityState.Modified;
-                db.SaveChanges();
+                _context.Entry(kategori).State = EntityState.Modified;
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(kategori);
@@ -88,7 +98,7 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Kategori kategori = db.Kategori.Find(id);
+            Kategori kategori = _context.Kategori.Find(id);
             if (kategori == null)
             {
                 return HttpNotFound();
@@ -101,19 +111,10 @@ namespace MVCBlog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Kategori kategori = db.Kategori.Find(id);
-            db.Kategori.Remove(kategori);
-            db.SaveChanges();
+            Kategori kategori = _context.Kategori.Find(id);
+            _context.Kategori.Remove(kategori);
+            _context.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

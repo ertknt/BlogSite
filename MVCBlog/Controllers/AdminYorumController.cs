@@ -13,12 +13,22 @@ namespace MVCBlog.Controllers
 {
     public class AdminYorumController : Controller
     {
-        private MVCBlogDb db = new MVCBlogDb();
+        private MVCBlogDb _context;
+
+        public AdminYorumController()
+        {
+            _context = new MVCBlogDb();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
 
         public ActionResult Index(int Page=1)
         {
-            var yorumlar = db.Yorum.OrderByDescending(y => y.Id).ToPagedList(Page, 4);
+            var yorumlar = _context.Yorum.OrderByDescending(y => y.Id).ToPagedList(Page, 4);
 
             return View(yorumlar);
         }
@@ -30,7 +40,7 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Yorum yorum = db.Yorum.Find(id);
+            Yorum yorum = _context.Yorum.Find(id);
             if (yorum == null)
             {
                 return HttpNotFound();
@@ -45,13 +55,13 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Yorum yorum = db.Yorum.Find(id);
+            Yorum yorum = _context.Yorum.Find(id);
             if (yorum == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.MakaleId = new SelectList(db.Makale, "Id", "Baslik", yorum.MakaleId);
-            ViewBag.UyeId = new SelectList(db.Uye, "Id", "KullaniciAdi", yorum.UyeId);
+            ViewBag.MakaleId = new SelectList(_context.Makale, "Id", "Baslik", yorum.MakaleId);
+            ViewBag.UyeId = new SelectList(_context.Uye, "Id", "KullaniciAdi", yorum.UyeId);
             return View(yorum);
         }
 
@@ -62,12 +72,12 @@ namespace MVCBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(yorum).State = EntityState.Modified;
-                db.SaveChanges();
+                _context.Entry(yorum).State = EntityState.Modified;
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.MakaleId = new SelectList(db.Makale, "Id", "Baslik", yorum.MakaleId);
-            ViewBag.UyeId = new SelectList(db.Uye, "Id", "KullaniciAdi", yorum.UyeId);
+            ViewBag.MakaleId = new SelectList(_context.Makale, "Id", "Baslik", yorum.MakaleId);
+            ViewBag.UyeId = new SelectList(_context.Uye, "Id", "KullaniciAdi", yorum.UyeId);
             return View(yorum);
         }
 
@@ -78,7 +88,7 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Yorum yorum = db.Yorum.Find(id);
+            Yorum yorum = _context.Yorum.Find(id);
             if (yorum == null)
             {
                 return HttpNotFound();
@@ -91,19 +101,10 @@ namespace MVCBlog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Yorum yorum = db.Yorum.Find(id);
-            db.Yorum.Remove(yorum);
-            db.SaveChanges();
+            Yorum yorum = _context.Yorum.Find(id);
+            _context.Yorum.Remove(yorum);
+            _context.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

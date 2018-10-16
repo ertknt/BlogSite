@@ -13,12 +13,22 @@ namespace MVCBlog.Controllers
 {
     public class AdminUyeController : Controller
     {
-        private MVCBlogDb db = new MVCBlogDb();
+        private MVCBlogDb _context;
+
+        public AdminUyeController()
+        {
+            _context = new MVCBlogDb();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         // GET: AdminUye
         public ActionResult Index(int Page=1)
         {
-            var uyeler = db.Uye.OrderByDescending(u => u.Id).ToPagedList(Page,4);
+            var uyeler = _context.Uye.OrderByDescending(u => u.Id).ToPagedList(Page,4);
 
             return View(uyeler);
         }
@@ -31,7 +41,7 @@ namespace MVCBlog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Uye uye = db.Uye.Find(id);
+            Uye uye = _context.Uye.Find(id);
 
             if (uye == null)
             {
@@ -43,7 +53,7 @@ namespace MVCBlog.Controllers
         // GET: AdminUye/Create
         public ActionResult Create()
         {
-            ViewBag.YetkiId = new SelectList(db.Yetki, "Id", "Yetki1");
+            ViewBag.YetkiId = new SelectList(_context.Yetki, "Id", "Yetki1");
             return View();
         }
 
@@ -56,12 +66,12 @@ namespace MVCBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Uye.Add(uye);
-                db.SaveChanges();
+                _context.Uye.Add(uye);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.YetkiId = new SelectList(db.Yetki, "Id", "Yetki1", uye.YetkiId);
+            ViewBag.YetkiId = new SelectList(_context.Yetki, "Id", "Yetki1", uye.YetkiId);
             return View(uye);
         }
 
@@ -72,12 +82,12 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Uye uye = db.Uye.Find(id);
+            Uye uye = _context.Uye.Find(id);
             if (uye == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.YetkiId = new SelectList(db.Yetki, "Id", "Yetki1", uye.YetkiId);
+            ViewBag.YetkiId = new SelectList(_context.Yetki, "Id", "Yetki1", uye.YetkiId);
             return View(uye);
         }
 
@@ -90,11 +100,11 @@ namespace MVCBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(uye).State = EntityState.Modified;
-                db.SaveChanges();
+                _context.Entry(uye).State = EntityState.Modified;
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.YetkiId = new SelectList(db.Yetki, "Id", "Yetki1", uye.YetkiId);
+            ViewBag.YetkiId = new SelectList(_context.Yetki, "Id", "Yetki1", uye.YetkiId);
             return View(uye);
         }
 
@@ -105,7 +115,7 @@ namespace MVCBlog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Uye uye = db.Uye.Find(id);
+            Uye uye = _context.Uye.Find(id);
             if (uye == null)
             {
                 return HttpNotFound();
@@ -118,19 +128,10 @@ namespace MVCBlog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Uye uye = db.Uye.Find(id);
-            db.Uye.Remove(uye);
-            db.SaveChanges();
+            Uye uye = _context.Uye.Find(id);
+            _context.Uye.Remove(uye);
+            _context.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
