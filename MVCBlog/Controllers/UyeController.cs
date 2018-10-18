@@ -53,7 +53,12 @@ namespace MVCBlog.Controllers
         [HttpPost]
         public ActionResult Create(Uye uye, HttpPostedFileBase Foto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            else
             {
                 if (Foto != null)
                 {
@@ -73,9 +78,10 @@ namespace MVCBlog.Controllers
                 Session["Id"] = uye.Id;
                 Session["KullaniciAdi"] = uye.KullaniciAdi;
 
-            }
 
-            return RedirectToAction("Index", "Home");
+
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public ActionResult Edit(int id)
@@ -91,13 +97,20 @@ namespace MVCBlog.Controllers
         [HttpPost]
         public ActionResult Edit(int id, Uye uye, HttpPostedFileBase Foto)
         {
-            if (ModelState.IsValid)
+            var guncellenecekUye = _context.Uye.Where(u => u.Id == id).SingleOrDefault();
+
+            if (!ModelState.IsValid)
             {
-                var guncellenecekUye = _context.Uye.Where(u => u.Id == id).SingleOrDefault();
+
+                return View();
+            }
+            else
+            {
+
 
                 if (Foto != null)
                 {
-                   
+
 
                     WebImage img = new WebImage(Foto.InputStream);
                     FileInfo fotoInfo = new FileInfo(Foto.FileName);
@@ -120,10 +133,7 @@ namespace MVCBlog.Controllers
                 return RedirectToAction("Index", "Home", new { id = guncellenecekUye.Id });
             }
 
-
-            return View();
         }
-
         public ActionResult Login()
         {
             return View();

@@ -19,11 +19,12 @@ namespace MVCBlog.Models
 
         public int Id { get; set; }
 
-        
+        [Required]
         [Display(Name ="Makale Baþlýðý")]
         [StringLength(150)]
         public string Baslik { get; set; }
 
+        [Required]
         [AllowHtml]
         [UIHint("tinymce_full_compressed")]
         [Display(Name = "Makale Ýçeriði")]

@@ -17,6 +17,7 @@ namespace MVCBlog.Models
 
         public int Id { get; set; }
 
+        [Required]
         [Display(Name = "Etiket Adı")]
         [StringLength(50)]
         public string İsim { get; set; }

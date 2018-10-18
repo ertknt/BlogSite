@@ -17,6 +17,7 @@ namespace MVCBlog.Models
 
         public int Id { get; set; }
 
+        [Required]
         [Display(Name = "Kategori Adý")]
         [StringLength(50)]
         public string Isim { get; set; }

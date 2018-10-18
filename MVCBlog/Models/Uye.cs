@@ -18,19 +18,23 @@ namespace MVCBlog.Models
 
         public int Id { get; set; }
 
+        [Required]
         [Display(Name = "Kullanýcý Adý")]
         [StringLength(50)]
         public string KullaniciAdi { get; set; }
 
+        [Required]
         [DataType(DataType.EmailAddress, ErrorMessage = "Geçersiz E-mail Adresi")]
         [Display(Name = "E-mail")]
         [StringLength(50)]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Þifre")]
         [StringLength(20)]
         public string Sifre { get; set; }
 
+        [Required]
         [Display(Name ="Ad Soyad")]
         [StringLength(50)]
         public string AdSoyad { get; set; }
