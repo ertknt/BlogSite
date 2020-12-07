@@ -11,7 +11,7 @@ namespace MVCBlog.Controllers
     {
         MVCBlogDb db = new MVCBlogDb();
 
-        
+        //test commit
         public ActionResult Index()
         {
             ViewBag.MakaleSayisi = db.Makale.Count();
